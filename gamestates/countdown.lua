@@ -1,8 +1,8 @@
 local moonshine = require 'lib.moonshine'
 
-local intro = {}
+local countdown = {}
 
-function intro:init() -- Called once, and only once, before entering the state the first time
+function countdown:init() -- Called once, and only once, before entering the state the first time
 	self.video = love.graphics.newVideo("ressource/video/countdown.ogv", { audio = true})
 
 	local dx, dy = love.graphics.getDimensions()
@@ -17,42 +17,42 @@ function intro:init() -- Called once, and only once, before entering the state t
 	self.effect.crt.distortionFactor = {1.06, 1.065}
 end
 
-function intro:enter(previous) -- Called every time when entering the state
+function countdown:enter(previous) -- Called every time when entering the state
 	self.video:play()
 end
 
-function intro:leave() -- Called when leaving a state.
+function countdown:leave() -- Called when leaving a state.
 end
 
-function intro:resume() -- Called when re-entering a state by Gamestate.pop()
+function countdown:resume() -- Called when re-entering a state by Gamestate.pop()
 end
 
-function intro:update(dt)
+function countdown:update(dt)
 	if self.video:tell() > 11.5 then
 		data.current_etapes = 1
 		Gamestate.switch(states.game, data.etapes[1])
 	end
 end
 
-function intro:draw()
+function countdown:draw()
 	self.effect(function()
 		love.graphics.draw(self.video, 0, 0, 0, self.kx, self.ky)
 	end)
 end
 
-function intro:focus(focus)
+function countdown:focus(focus)
 end
 
-function intro:quit()
+function countdown:quit()
 end
 
-function intro:keypressed(key, scancode)
+function countdown:keypressed(key, scancode)
 end
 
-function intro:mousepressed(x,y, mouse_btn)
+function countdown:mousepressed(x,y, mouse_btn)
 end
 
-function intro:joystickpressed(joystick, button )
+function countdown:joystickpressed(joystick, button )
 end
 
-return intro
+return countdown

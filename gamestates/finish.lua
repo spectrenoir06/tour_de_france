@@ -11,8 +11,8 @@ function finish:init() -- Called once, and only once, before entering the state 
 
 	for k,v in ipairs(love.filesystem.getDirectoryItems("ressource/img/game/villes")) do
 		self.text[v] = {}
-		self.text[v].ville = love.graphics.newImage("ressource/img/game/villes/"..v.."/ville.jpeg")
-		self.text[v].pub   = love.graphics.newImage("ressource/img/game/villes/"..v.."/pub.jpg")
+		self.text[v].ville = love.graphics.newImage("ressource/img/game/villes/"..v.."/ville.png")
+		self.text[v].pub   = love.graphics.newImage("ressource/img/game/villes/"..v.."/pub.png")
 	end
 
 	self.ville_ky = ly / self.text[data.etapes[data.current_etapes].stop].ville:getHeight() * 0.75
@@ -26,6 +26,7 @@ function finish:init() -- Called once, and only once, before entering the state 
 
 	self.font = love.graphics.newFont("ressource/font/vintage.ttf", 60)
 	self.font2 = love.graphics.newFont(40)
+
 end
 
 function finish:enter(previous, players) -- Called every time when entering the state
@@ -34,9 +35,14 @@ function finish:enter(previous, players) -- Called every time when entering the 
 	print(self.msg_text)
 
 	self.posY = ly
+	self.posPub = -lx
 	Timer.tween(4, self, {posY = ly/2 - (self.text[data.etapes[data.current_etapes].stop].ville:getHeight() / 2 * self.ville_ky)}, 'in-bounce')
 
 	Timer.after(5, function()
+		Timer.tween(4, self, {posPub = 0}, 'out-elastic')
+	end)
+
+	Timer.after(10, function()
 		data.current_etapes = data.current_etapes + 1
 
 		if data.current_etapes > #data.etapes then
@@ -73,7 +79,9 @@ function finish:draw()
 		love.graphics.print(data.etapes[data.current_etapes].players[2].score, 50, self.posY + 80 * 2)
 
 		love.graphics.setColor(1,1,1)
-		love.graphics.draw(self.text[data.etapes[data.current_etapes].stop].ville, 600, self.posY, 0, self.ville_ky, self.ville_ky)
+		love.graphics.draw(self.text[data.etapes[data.current_etapes].stop].ville, 400, self.posY, 0, self.ville_ky, self.ville_ky)
+
+		love.graphics.draw(self.text[data.etapes[data.current_etapes].stop].pub, self.posPub)
 		-- love.graphics.draw(self.text.pub, 0, 0, 0, self.pub_ky, self.pub_ky)
 	end)
 end

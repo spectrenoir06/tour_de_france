@@ -32,7 +32,7 @@ end
 function start:mousepressed(x,y, mouse_btn)
 end
 
-function start:joystickpressed(joystick, button )
+function start:joystickpressed(joystick, button)
 end
 
 return start

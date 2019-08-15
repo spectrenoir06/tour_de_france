@@ -16,8 +16,11 @@ function game:init() -- Called once, and only once, before entering the state th
 
 	self.text.players = {}
 
-	for k,v in ipairs(love.filesystem.getDirectoryItems("ressource/img/characters")) do
-		self.text.players[k] = love.graphics.newImage("ressource/img/characters/"..v)
+	for i=1,2 do
+		self.text.players[i] = {
+			love.graphics.newImage("ressource/img/characters/"..i.."-1.png"),
+			love.graphics.newImage("ressource/img/characters/"..i.."-2.png"),
+		}
 	end
 
 	self.effect = moonshine(moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
@@ -84,15 +87,17 @@ function game:enter(previous, etape) -- Called every time when entering the stat
 	self.players = {
 		{
 			dist = 0,
-			speed = 0,
+			speed = 5,
 			score = 0,
 			texture = self.text.players[1],
+			anim = 1,
 		},
 		{
 			dist = 0,
-			speed = 0,
+			speed = 5,
 			score = 0,
-			texture = self.text.players[1],
+			texture = self.text.players[2],
+			anim = 1,
 		}
 	}
 	love.graphics.setFont(self.font)
@@ -104,7 +109,26 @@ end
 function game:resume() -- Called when re-entering a state by Gamestate.pop()
 end
 
+local count = 0
+
 function game:update(dt)
+	count = count + dt
+	if count > 0.2 then
+		if self.players[1].speed > 0 then
+			self.players[1].anim = self.players[1].anim + 1
+			if self.players[1].anim > 2 then
+				self.players[1].anim = 1
+			end
+		end
+		if self.players[2].speed > 0 then
+			self.players[2].anim = self.players[2].anim + 1
+			if self.players[2].anim > 2 then
+				self.players[2].anim = 1
+			end
+		end
+		count = 0
+	end
+
 	if self.players[1].dist < self.map.size then
 		self.players[1].dist = self.players[1].dist + dt*250
 		self.players[1].score = self.players[1].score + dt
@@ -146,7 +170,7 @@ function game:draw()
 			love.graphics.rectangle("fill", 0, off_y[i], 1900, 30)
 
 			love.graphics.setColor(1,1,1)
-			love.graphics.draw(self.players[i].texture, (self.players[i].dist / self.map.size * (720 * 1.5 - self.players[i].texture:getWidth()*0.3)), off_y[i] - self.players[i].texture:getHeight()*0.3, 0, 0.3, 0.3)
+			love.graphics.draw(self.players[i].texture[self.players[i].anim], (self.players[i].dist / self.map.size * (720 * 1.5 - self.players[i].texture[1]:getWidth()*0.08)), off_y[i] - self.players[i].texture[1]:getHeight()*0.08, 0, 0.08, 0.08)
 		end
 		love.graphics.draw(self.map.text_start, 0, 0, 0, 1, 1)
 		love.graphics.draw(self.map.text_stop,  720*1.5-200, 0, 0, 1, 1)
