@@ -15,6 +15,8 @@ void hall2_int() {
 }
 
 void setup() {
+	Serial.begin(115200);
+
 	pinMode(LED_PIN, OUTPUT);
 
 	pinMode(HALL1_PIN, INPUT);
