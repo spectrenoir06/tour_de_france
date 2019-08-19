@@ -4,10 +4,11 @@ states = {}
 
 states.countdown	= require "gamestates.countdown"
 states.start		= require "gamestates.start"
--- states.player = require "gamestates.player"
--- states.map    = require "gamestates.map"
 states.game			= require "gamestates.game"
 states.finish		= require "gamestates.finish"
+states.vs			= require "gamestates.vs"
+-- states.player = require "gamestates.player"
+-- states.map    = require "gamestates.map"
 
 data = {
 	current_etapes = 1,
@@ -57,7 +58,7 @@ end
 
 function love.load()
 	Gamestate.registerEvents()
-	-- Gamestate.switch(states.intro)
-	data.current_etapes = 1
-	Gamestate.switch(states.game, data.etapes[1])
+	Gamestate.switch(states.vs)
+	-- data.current_etapes = 1
+	-- Gamestate.switch(states.game, data.etapes[1])
 end

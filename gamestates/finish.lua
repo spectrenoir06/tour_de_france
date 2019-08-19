@@ -46,9 +46,9 @@ function finish:enter(previous, players) -- Called every time when entering the 
 		data.current_etapes = data.current_etapes + 1
 
 		if data.current_etapes > #data.etapes then
-			Gamestate.switch(states.intro)
+			-- Gamestate.switch(states.intro)
 		else
-			Gamestate.switch(states.game, data.etapes[data.current_etapes])
+			Gamestate.switch(states.vs)
 		end
 	end)
 
@@ -75,8 +75,17 @@ function finish:draw()
 		love.graphics.print(self.msg_text, 50, self.posY)
 
 		love.graphics.setFont(self.font2)
-		love.graphics.print(data.etapes[data.current_etapes].players[1].score, 50, self.posY + 80)
-		love.graphics.print(data.etapes[data.current_etapes].players[2].score, 50, self.posY + 80 * 2)
+
+		local score = data.etapes[data.current_etapes].players[1].score
+		local min = math.floor(score/60)
+		local sec = math.floor(score%60)
+		love.graphics.print(min.."min "..sec.."S", 50, self.posY + 80)
+
+		local score = data.etapes[data.current_etapes].players[2].score
+		local min = math.floor(score/60)
+		local sec = math.floor(score%60)
+		love.graphics.print(min.."min "..sec.."S", 50, self.posY + 80 * 2)
+
 
 		love.graphics.setColor(1,1,1)
 		love.graphics.draw(self.text[data.etapes[data.current_etapes].stop].ville, 400, self.posY, 0, self.ville_ky, self.ville_ky)

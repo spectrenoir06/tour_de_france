@@ -5,7 +5,6 @@
 volatile uint16_t hall1_count = 0;
 volatile uint16_t hall2_count = 0;
 
-
 void hall1_int() {
 	hall1_count++;
 }

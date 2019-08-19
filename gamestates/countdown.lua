@@ -29,8 +29,7 @@ end
 
 function countdown:update(dt)
 	if self.video:tell() > 11.5 then
-		data.current_etapes = 1
-		Gamestate.switch(states.game, data.etapes[1])
+		Gamestate.switch(states.game, data.etapes[data.current_etapes])
 	end
 end
 
