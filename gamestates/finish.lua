@@ -18,7 +18,7 @@ function finish:init() -- Called once, and only once, before entering the state 
 	self.ville_ky = ly / self.text[data.etapes[data.current_etapes].stop].ville:getHeight() * 0.75
 	-- self.pub_ky = ly / self.pub:getHeight() / 2
 
-	self.effect = moonshine(moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
+	self.effect = moonshine(1080,864,moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
 	self.effect.chromasep.radius = 3
 	self.effect.scanlines.width = 2
 	self.effect.scanlines.opacity = 0.2

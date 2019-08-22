@@ -3,7 +3,7 @@ local Timer = require 'lib.timer'
 
 local vs = {}
 
-local dx, dy = love.graphics.getDimensions()
+local dx, dy = 1080, 864
 
 function vs:init() -- Called once, and only once, before entering the state the first time
 
@@ -11,7 +11,7 @@ function vs:init() -- Called once, and only once, before entering the state the 
 	self.text_1 = love.graphics.newImage("ressource/img/game/VS 1.png")
 	self.text_2 = love.graphics.newImage("ressource/img/game/VS 2.png")
 
-	self.effect = moonshine(moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
+	self.effect = moonshine(1080,864,moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
 	self.effect.chromasep.radius = 3
 	self.effect.scanlines.width = 2
 	self.effect.scanlines.opacity = 0.2
@@ -37,18 +37,21 @@ function vs:update(dt)
 end
 
 function vs:draw()
-
 	love.graphics.setCanvas(screen)
 	love.graphics.clear()
 
-	love.graphics.setColor(1,1,1)
-	love.graphics.draw(self.text_1, -540 + self.pos, 0)
-	love.graphics.draw(self.text_2, 1080 - self.pos, 0)
-	love.graphics.print("VS", dx/2-70, dy/2-60)
+	self.effect(function()
+		love.graphics.setColor(1,1,1)
+		love.graphics.draw(self.text_1, -540 + self.pos, 0)
+		love.graphics.draw(self.text_2, 1080 - self.pos, 0)
+		love.graphics.print("VS", dx/2-70, dy/2-60)
+
+	end)
 
 	love.graphics.setCanvas()
 	local lx,ly = love.graphics.getDimensions()
 	love.graphics.draw(screen,0,0,0,lx/1080,ly/864)
+
 end
 
 function vs:focus(focus)

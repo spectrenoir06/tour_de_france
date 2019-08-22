@@ -10,7 +10,7 @@ function countdown:init() -- Called once, and only once, before entering the sta
 	self.kx = dx / self.video:getWidth()
 	self.ky = dy / self.video:getHeight()
 
-	self.effect = moonshine(moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
+	self.effect = moonshine(1080,864,moonshine.effects.chromasep).chain(moonshine.effects.scanlines).chain(moonshine.effects.vignette).chain(moonshine.effects.crt)
 	self.effect.chromasep.radius = 3
 	self.effect.scanlines.width = 2
 	self.effect.scanlines.opacity = 0.2
