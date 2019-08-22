@@ -51,6 +51,8 @@ data = {
 	}
 }
 
+screen = love.graphics.newCanvas(1080, 864)
+
 
 function rgb(r,g,b)
 	return r/255, g/255, b/255

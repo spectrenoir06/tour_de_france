@@ -3,7 +3,7 @@ local finish = {}
 local moonshine = require 'lib.moonshine'
 local Timer = require 'lib.timer'
 
-local lx, ly = love.graphics.getDimensions()
+local lx, ly = 1080, 864
 
 function finish:init() -- Called once, and only once, before entering the state the first time
 
@@ -66,6 +66,10 @@ function finish:update(dt)
 end
 
 function finish:draw()
+
+	love.graphics.setCanvas(screen)
+	love.graphics.clear()
+
 	self.effect(function()
 		love.graphics.setColor(rgb(242, 195, 91))
 		love.graphics.rectangle("fill", 0, 0, 1500, 1000)
@@ -93,6 +97,11 @@ function finish:draw()
 		love.graphics.draw(self.text[data.etapes[data.current_etapes].stop].pub, self.posPub)
 		-- love.graphics.draw(self.text.pub, 0, 0, 0, self.pub_ky, self.pub_ky)
 	end)
+
+	love.graphics.setCanvas()
+	local lx,ly = love.graphics.getDimensions()
+	love.graphics.draw(screen,0,0,0,lx/1080,ly/864)
+
 end
 
 function finish:focus(focus)

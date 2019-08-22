@@ -187,9 +187,23 @@ function game:update(dt)
 	local error = self.thread:getError()
 	assert( not error, error )
 
+	local info = love.thread.getChannel('data'):pop()
+	if info then
+		local p1, p2 = string.match(info, "^(%d+),(%d+)")
+		-- print(info)
+		if p1 and p2 then
+			print(p1,p2)
+			self.players[1].speed = 500--tonumber(p1)
+			self.players[2].speed = 500--tonumber(p2)
+		end
+	end
+
 end
 
 function game:draw()
+
+	love.graphics.setCanvas(screen)
+	love.graphics.clear()
 
 	self.effect(function()
 
@@ -220,15 +234,11 @@ function game:draw()
 	end)
 	love.graphics.print(self.players[1].dist, 0, 0)
 	love.graphics.print(data.etapes[data.current_etapes].start.." => "..data.etapes[data.current_etapes].stop, 0, 20)
-	local info = love.thread.getChannel('data'):pop()
-	if info then
-		local p1, p2 = string.match(info, "^(%d+),(%d+)")
-		-- print(info)
-		if p1 and p2 then
-			print(p1,p2)
-			self.players[1].speed = tonumber(p1)
-		end
-	end
+
+	love.graphics.setCanvas()
+	local lx,ly = love.graphics.getDimensions()
+	love.graphics.draw(screen,0,0,0,lx/1080,ly/864)
+
 end
 
 function game:focus(focus)

@@ -5,7 +5,7 @@ local countdown = {}
 function countdown:init() -- Called once, and only once, before entering the state the first time
 	self.video = love.graphics.newVideo("ressource/video/countdown.ogv", { audio = true})
 
-	local dx, dy = love.graphics.getDimensions()
+	local dx, dy = 1080, 864
 
 	self.kx = dx / self.video:getWidth()
 	self.ky = dy / self.video:getHeight()
@@ -34,9 +34,18 @@ function countdown:update(dt)
 end
 
 function countdown:draw()
+
+	love.graphics.setCanvas(screen)
+	love.graphics.clear()
+
 	self.effect(function()
 		love.graphics.draw(self.video, 0, 0, 0, self.kx, self.ky)
 	end)
+
+
+	love.graphics.setCanvas()
+	local lx,ly = love.graphics.getDimensions()
+	love.graphics.draw(screen,0,0,0,lx/1080,ly/864)
 end
 
 function countdown:focus(focus)

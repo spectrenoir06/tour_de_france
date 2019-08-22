@@ -37,10 +37,18 @@ function vs:update(dt)
 end
 
 function vs:draw()
+
+	love.graphics.setCanvas(screen)
+	love.graphics.clear()
+
 	love.graphics.setColor(1,1,1)
 	love.graphics.draw(self.text_1, -540 + self.pos, 0)
 	love.graphics.draw(self.text_2, 1080 - self.pos, 0)
 	love.graphics.print("VS", dx/2-70, dy/2-60)
+
+	love.graphics.setCanvas()
+	local lx,ly = love.graphics.getDimensions()
+	love.graphics.draw(screen,0,0,0,lx/1080,ly/864)
 end
 
 function vs:focus(focus)
