@@ -58,7 +58,7 @@ end
 
 function love.load()
 	Gamestate.registerEvents()
-	Gamestate.switch(states.vs)
-	-- data.current_etapes = 1
-	-- Gamestate.switch(states.game, data.etapes[1])
+	-- Gamestate.switch(states.vs)
+	data.current_etapes = 1
+	Gamestate.switch(states.game, data.etapes[1])
 end

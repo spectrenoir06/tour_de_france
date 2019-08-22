@@ -1,6 +1,38 @@
-local moonshine = require 'lib.moonshine'
+local moonshine	= require 'lib.moonshine'
 
 local game = {}
+
+local threadCode = [[
+	local ffi = require'ffi'
+	local sp		= require "lib/rs232"
+
+	local serial_port = "ttyACM0"
+
+	for k,v in ipairs(sp.ports()) do print(k,v) end
+
+	-- Receive values sent via thread:start
+	local min, max = ...
+
+	elem_ct = ffi.typeof('char')
+	buf_ct = ffi.typeof('$[?]', elem_ct)
+	bufsize = 4096
+	buf = buf_ct(bufsize)
+
+	serial_start, err = sp.open(serial_port, 115200)
+	if not serial_start then
+		print("Can't open:", serial_port, err)
+	else
+		print("Open: "..serial_port)
+	end
+
+	while true do
+
+		serial_start:read(buf, 9)
+		local str = ffi.string(buf)
+		-- print("serial: '"..str.."'")
+		love.thread.getChannel('data'):push(str)
+	end
+]]
 
 function game:init() -- Called once, and only once, before entering the state the first time
 
@@ -30,6 +62,10 @@ function game:init() -- Called once, and only once, before entering the state th
 	self.effect.crt.distortionFactor = {1.06, 1.065}
 
 	self.font = love.graphics.newFont(20)
+
+	self.thread = love.thread.newThread( threadCode )
+	self.thread:start( 99, 1000 )
+
 end
 
 function game:enter(previous, etape) -- Called every time when entering the state
@@ -87,20 +123,22 @@ function game:enter(previous, etape) -- Called every time when entering the stat
 	self.players = {
 		{
 			dist = 0,
-			speed = 5,
+			speed = 0,
 			score = 0,
 			texture = self.text.players[1],
 			anim = 1,
 		},
 		{
 			dist = 0,
-			speed = 5,
+			speed = 0,
 			score = 0,
 			texture = self.text.players[2],
 			anim = 1,
 		}
 	}
 	love.graphics.setFont(self.font)
+
+	love.thread.getChannel('data'):clear()
 end
 
 function game:leave() -- Called when leaving a state.
@@ -130,12 +168,12 @@ function game:update(dt)
 	end
 
 	if self.players[1].dist < self.map.size then
-		self.players[1].dist = self.players[1].dist + dt*250
+		self.players[1].dist = self.players[1].dist + dt*self.players[1].speed
 		self.players[1].score = self.players[1].score + dt
 	end
 
 	if self.players[2].dist < self.map.size then
-		self.players[2].dist = self.players[2].dist + dt*300
+		self.players[2].dist = self.players[2].dist + dt*self.players[2].speed
 		self.players[2].score = self.players[2].score + dt
 	end
 
@@ -144,6 +182,11 @@ function game:update(dt)
 		data.etapes[data.current_etapes].players = self.players
 		Gamestate.switch(states.finish, self.players)
 	end
+
+		-- Make sure no errors occured.
+	local error = self.thread:getError()
+	assert( not error, error )
+
 end
 
 function game:draw()
@@ -177,7 +220,15 @@ function game:draw()
 	end)
 	love.graphics.print(self.players[1].dist, 0, 0)
 	love.graphics.print(data.etapes[data.current_etapes].start.." => "..data.etapes[data.current_etapes].stop, 0, 20)
-
+	local info = love.thread.getChannel('data'):pop()
+	if info then
+		local p1, p2 = string.match(info, "^(%d+),(%d+)")
+		-- print(info)
+		if p1 and p2 then
+			print(p1,p2)
+			self.players[1].speed = tonumber(p1)
+		end
+	end
 end
 
 function game:focus(focus)
