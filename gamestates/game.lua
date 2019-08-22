@@ -56,7 +56,7 @@ function game:enter(previous, etape) -- Called every time when entering the stat
 				data = {},
 			},
 		},
-		background    = table.pack(rgb(242, 195, 91)),
+		background    = {242/255, 195/255, 91/255},
 		text_montagne = self.text.montagne,
 		text_tree     = self.text.tree,
 		text_start    = self.text[etape.start].panneau,
